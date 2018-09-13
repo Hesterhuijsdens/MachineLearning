@@ -1,7 +1,6 @@
 from mnist import MNIST
 import numpy as np
 import matplotlib.pyplot as plt
-import random
 
 
 def normalize(x): # Rescale to [0,1] range
@@ -24,15 +23,16 @@ def load():
     y7 = [y[i] for i in range(0, len(y)) if y[i] == 7]
     # xtest, ytest = data.load_testing()
 
-    x3 = normalize(x3)
+  #  x3 = normalize(x3)
     x7 = normalize(x7)
-    data3 = [x3, y3]
-    data7 = [x7, y7]
+    data3 = [normalize(x3), y3]
+    data7 = [normalize(x7), y7]
     data = np.concatenate((data3, data7), axis=1)
-    random.shuffle(data)
+    np.take(data, np.random.permutation(np.shape(data)[1]), axis=1, out=data)
     dataX = np.zeros((12396,784))
     for i in range(12396):
         dataX[i,:] = data[0][i]
+
     return dataX, np.reshape(data[1], (12396, 1))
 
 
