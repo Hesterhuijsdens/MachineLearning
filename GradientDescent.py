@@ -78,8 +78,8 @@ epochs = 50
 eta = 0.001
 losses = []
 xaxis = []
-for epoch in xrange(epochs):
-
+for epoch in range(epochs):
+    print('hoi')
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
 
