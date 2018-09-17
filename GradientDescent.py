@@ -25,28 +25,39 @@ def forward(x, w):
 
 # loss function
 def cost(y, t, N):
-    # print y, t, N
-    # print -1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y))
 
 
-    # for image in y:
-    #     for item in image:
-    #         if item == 0:
-    #             y += 0.0001
+    for image in y:
+        for item in image:
+            if item == 0:
+                y += 0.0001
+    a = -t * np.log(y)
+    # print a
 
-
-    # a = t * np.log(y)
-    #
     # print np.shape(t), np.shape(y)
-    #
-    # b = (1 - t) * np.log(1 - y)
-    #
-    # # print np.shape(a), np.shape(b)
-    #
-    # c = np.sum(a + b)
-    # return -1/N * c
 
-    return -1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y))
+    b = (1 - t) * np.log(1 - y)
+    # print "a", a[0][:10]
+    # print "b", b[0][:10]
+    # print "a-b", (a - b)[0][:10]
+    print "a", a
+    print "b", b
+    print "a-b", (a - b)
+
+    # print np.shape(a), np.shape(b)
+    # print np.shape((a - b))
+
+    bb = a - b
+    # print bb
+
+    c = np.sum(bb)
+    print c
+    # print N
+    # print type(N)
+    # print 1/N * c
+    return 1/N * c
+
+    # return -1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y))
 
 
 # the gradient; backward propagation computes the backward pass for a one-layer network
@@ -64,8 +75,8 @@ def backward(x, y, t):
 
 # load data
 x37_train, t37_train = load()
-x37_train = x37_train[:100]
-t37_train = t37_train[:100]
+x37_train = x37_train[:4]
+t37_train = t37_train[:4]
 
 # initialize weights
 w = np.random.randn(1, np.shape(x37_train)[1])
