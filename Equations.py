@@ -22,32 +22,12 @@ def forward(x, w):
 # loss function
 def cost(y, t):
 
-    # [item += 0.0001 for image in y for item in image if item == 0]
+    y[y < 0.001] = 0.001
+    y[y > 0.999] = 0.999
 
     N = np.shape(t)[0]
-
-    for image in y:
-        for item in image:
-            if item == 0:
-                item += 0.0001
-
-    print np.shape(y)
+    # print -1 / N * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
     return -1 / N * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
-
-    # sum = 0
-    # for n in range(1, N):
-    #     if(y[0, n] != 0 and (1 - y[0, n] != 0)):
-    #         sum += t[n] * log(y[0, n]) + (1 - t[n]) * log(1 - y[0, n])
-    #     elif y[0, n] == 0:
-    #         sum += t[n] * -inf + (1 - t[n]) * log(1 - y[0, n])
-    #     else:
-    #         sum += t[n] * log(y[0, n]) + (1 - t[n]) * -inf
-    #
-    # return -1/N * sum
-
-    # return (-1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y)))
-    # print y, t, N
-    # print -1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y))
 
 
 # the gradient; backward propagation computes the backward pass for a one-layer network

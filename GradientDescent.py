@@ -21,7 +21,7 @@ N = np.shape(x37_train)[0]
 
 # training
 n_epochs = 100
-eta = 0.01
+eta = 0.05
 xaxis = []
 
 # arrays for saving losses
