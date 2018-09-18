@@ -9,7 +9,9 @@ t = t[:10]
 N = np.shape(x)[0]
 d = np.shape(x)[1]
 w = np.random.randn(1, d)
-decay = 0.1 # lambda
+
+# lambda
+decay = 0.1
 
 epochs = 10
 losses = []

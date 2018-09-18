@@ -1,5 +1,5 @@
 import numpy as np
-from math import log, inf
+from math import log
 
 
 # fully connected layer
@@ -20,7 +20,18 @@ def forward(x, w):
 
 
 # loss function
-def cost(y, t, N):
+def cost(y, t):
+
+    # [item += 0.0001 for image in y for item in image if item == 0]
+
+    N = np.shape(t)[0]
+
+    for image in y:
+        for item in image:
+            if item == 0:
+                item += 0.0001
+
+    print np.shape(y)
     return -1 / N * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
 
     # sum = 0
@@ -34,9 +45,15 @@ def cost(y, t, N):
     #
     # return -1/N * sum
 
-    #return (-1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y)))
+    # return (-1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y)))
     # print y, t, N
     # print -1/N * np.sum(t * np.log(y) + (1 - t) * np.log(1 - y))
+
+
+# the gradient; backward propagation computes the backward pass for a one-layer network
+# with sigmoid units and loss
+def backward(x, y, t):
+    return np.dot((y - np.transpose(t)), x)
 
 
 def gradient_e_decay(N, y, t, x, decay, w):    # with weight decay
