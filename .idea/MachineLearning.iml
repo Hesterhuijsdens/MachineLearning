@@ -4,7 +4,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Assignment2" />
     <orderEntry type="module" module-name="ProjectCCN" />
     <orderEntry type="module" module-name="Assignment4" />
     <orderEntry type="module" module-name="GANmodel" />

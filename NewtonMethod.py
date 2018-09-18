@@ -4,8 +4,8 @@ from PreprocessData import load
 from Equations import *
 
 x, t = load()   # Load the data
-x = x[:5]
-t = t[:5]
+x = x[:10]
+t = t[:10]
 N = np.shape(x)[0]
 d = np.shape(x)[1]
 w = np.random.randn(1, d)

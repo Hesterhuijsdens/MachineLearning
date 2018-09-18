@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../Assignment2/.idea/Assignment2.iml" filepath="$PROJECT_DIR$/../Assignment2/.idea/Assignment2.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Assignment4/.idea/Assignment4.iml" filepath="$PROJECT_DIR$/../Assignment4/.idea/Assignment4.iml" />
       <module fileurl="file://$PROJECT_DIR$/../GANmodel/.idea/GANmodel.iml" filepath="$PROJECT_DIR$/../GANmodel/.idea/GANmodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/MachineLearning.iml" filepath="$PROJECT_DIR$/.idea/MachineLearning.iml" />
