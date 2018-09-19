@@ -18,13 +18,20 @@ losses = []
 xaxis = []
 
 for epoch in range(epochs):
-    y = forward(np.transpose(x), w)        # y will be 1x100
-    grE = gradient_e_decay(N, y, t, x, decay, w)  # 1x785
-    H = hessian(N, x, y, decay, d)
-    Hinv = np.linalg.inv(H)        # should be changed to real inverse
+    y = forward(np.transpose(x), w)
+    grE = gradient_e_decay(y, t, x, decay, w)  # 1x785
+    print("grE")
+    print np.shape(grE)
+    print grE
+
+    H = hessian(x, y, decay, d)
+    print np.max(H)
+    print np.shape(H)
+    print np.linalg.det(H)
+    Hinv = np.linalg.pinv(H)
     w = w + np.transpose(-1 * np.matmul(Hinv, np.transpose(grE)))
-    print("loss: ", cost(y, t, N))
-    losses.append(cost(y, t, N))
+    print("loss: ", cost(y, t))
+    losses.append(cost(y, t))
     xaxis.append(epoch)
 
 # Compute results:
