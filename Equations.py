@@ -35,17 +35,17 @@ def backward(x, y, t):
     return np.dot((y - np.transpose(t)), x)
 
 
-# def momentum
-
-
-def gradient_e_decay(N, y, t, x, decay, w):    # with weight decay
+# def gradient_e_decay(N, y, t, x, decay, w):    # with weight decay
+def gradient_e_decay(y, t, x, decay, w):    # with weight decay
+    N = np.shape(x)[0]
     sum = 0
     for n in range(1, N):
         sum += (y[0, n] - t[n]) * x[n, :] + (decay/n)*w
     return (1/N) * sum
 
 
-def hessian(N, x, y, decay, d):   # with weight decay
+def hessian(x, y, decay, d):   # with weight decay
+    N = np.shape(x)[0]
     H = np.ones((d, d))
     for i in range(d):
         for j in range(d):
