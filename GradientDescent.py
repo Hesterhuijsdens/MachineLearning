@@ -5,7 +5,6 @@ from Equations import *
 # avoid overflow warnings
 np.seterr(all="ignore")
 
-
 # load data
 x37_training, t37_training = load()
 x37_train = x37_training[:500]
@@ -20,8 +19,8 @@ w = np.random.randn(1, np.shape(x37_train)[1])
 N = np.shape(x37_train)[0]
 
 # training
-n_epochs = 100
-eta = 0.05
+n_epochs = 10000
+eta = 0.001
 xaxis = []
 
 # arrays for saving losses
@@ -44,6 +43,7 @@ for epoch in range(n_epochs):
 
     y37_val = forward(np.transpose(x37_val), w)
     val_loss[epoch] = cost(y37_val, t37_val)
+print train_loss[9999], val_loss[9999]
 
 
 plt.figure(0)

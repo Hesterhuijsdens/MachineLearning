@@ -27,14 +27,13 @@ def load():
     data7 = [normalize(x7), y7]
     data = np.concatenate((data3, data7), axis=1)
     np.take(data, np.random.permutation(np.shape(data)[1]), axis=1, out=data)
-    dataX = np.zeros((12396,784))
+    dataX = np.zeros((12396, 784))
     for i in range(12396):
-        dataX[i,:] = data[0][i]
+        dataX[i, :] = data[0][i]
 
     dataX = np.column_stack([np.ones((12396, 1)), dataX])
     t = np.reshape(data[1], (12396, 1))
     t = [1 if label == 3 else 0 for label in t]  # t = 1 if the label is 3, t = 0 if the label is 7
-
     return dataX, t
 
 

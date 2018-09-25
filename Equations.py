@@ -26,7 +26,6 @@ def cost(y, t):
     y[y > 0.999] = 0.999
 
     N = np.shape(t)[0]
-    # print -1 / N * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
     return -1 / N * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
 
 
@@ -34,6 +33,9 @@ def cost(y, t):
 # with sigmoid units and loss
 def backward(x, y, t):
     return np.dot((y - np.transpose(t)), x)
+
+
+# def momentum
 
 
 def gradient_e_decay(N, y, t, x, decay, w):    # with weight decay
