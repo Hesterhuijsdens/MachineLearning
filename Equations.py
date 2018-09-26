@@ -1,5 +1,4 @@
 import numpy as np
-from math import log
 
 
 # fully connected layer
@@ -27,36 +26,45 @@ def cost(y, t):
     return (-1.0 / N) * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
 
 
+#  loss function with weight decay
+def cost_decay(y, t, decay, w):
+    N = np.shape(t)[0]
+    y[y < 0.001] = 0.001
+    y[y > 0.999] = 0.999
+    cost = (-1.0 / N) * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
+    sum = 0
+    for n in range(1, N):
+        sum += (decay/(2*n)) * np.dot(w[0, 0:n], w[0, 0:n])
+    return cost - (1.0/N) * sum
+
+
 # the gradient; backward propagation computes the backward pass for a one-layer network
 # with sigmoid units and loss
 def backward(x, y, t):
     return np.dot((y - np.transpose(t)), x)
 
 
-def gradient_e_decay(y, t, x, decay, w):    # with weight decay
+# the gradient of E with weight decay:
+def gradient_e_decay(y, t, x, decay, w):
     N = np.shape(x)[0]
-    return (1.0/N) * np.matmul(y - np.transpose(t), x)
+    sum = 0
+    for n in range(1, N):
+        sum += (decay/n) * w
+    return (1.0/N) * np.matmul(y - np.transpose(t), x) + np.mean(sum, 0)
 
 
-def hessian(x, y, decay, d):   # with weight decay
+# computes the Hessian with weight decay:
+def hessian(x, y, decay, d):
     N = np.shape(x)[0]
     H = np.ones((d, d))
-
     for i in range(d):
         for j in range(d):
             ans = np.multiply(np.multiply(np.multiply(x[:,i], y), 1-y), x[:,j])
+            if i == j:
+                for n in range(1, N): # weight decay
+                    ans += (decay/n)
             H[i, j] = np.sum(ans)
     return (1.0/N) * H
-    # for i in range(d):
-    #     for j in range(d):
-    #         som = 0
-    #         for n in range(N):
-    #             som += x[n, i] * y[0, n] * (1 - y[0, n]) * x[n, j]
-    #             # if i == j and n > 0:
-    #             #     som += decay/n
-    #
-    #         H[i, j] = (1.0/N) * som
-    # return H
 
 
 # Computes the percentage of misclassified patterns (for NewtonMethod):
