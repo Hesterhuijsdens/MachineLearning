@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 
 # fully connected layer
 def linear(x, w):
@@ -72,5 +72,32 @@ def classification_error(y, t):
         if (y[0, i] > 0.5 and t[i] == 0) or (y[0, i] < 0.5 and t[i] == 1):
             mistakes += 1
     return float(mistakes) / np.shape(y)[1]
+
+
+# same error function but more convenient for golden_section search -> should still be changed
+def error_function(w, x, t):
+    N = np.shape(x)[0]
+    y = forward(np.transpose(x), w)
+    y[y < 0.001] = 0.001
+    y[y > 0.999] = 0.999
+    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
+
+
+# to compute the step size for line search:
+def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
+    ratio = (math.sqrt(5) + 1) / 2
+    c = b - (b - a) / ratio
+    d = a + (b - a) / ratio
+
+    while abs(c - d) > tolerance:
+        if error_function(w + direction * c, x, t) < error_function(w + direction * d, x, t):
+            b = d
+        else:
+            a = c
+
+        c = b - (b - a) / ratio
+        d = a + (b - a) / ratio
+
+    return (b + a) / 2
 
 

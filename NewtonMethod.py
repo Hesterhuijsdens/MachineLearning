@@ -49,14 +49,14 @@ for epoch in range(epochs):
     w = w + dW
 
 
-# Compute and plot results:
+# compute and plot results:
 class_err = classification_error(y, t)
 print("class_err: ", class_err)
 
 class_err_test = classification_error(forward(np.transpose(x_test), w), t_test)
 print("class_err_test: ", class_err_test)
 
-# Stop time:
+# stop time:
 end = time.time()
 print("time: ", end - start)
 
