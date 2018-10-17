@@ -5,6 +5,7 @@ from Equations import *
 # avoid overflow warnings
 np.seterr(all="ignore")
 
+
 # load data
 x37_training, t37_training = load()
 x37_train = x37_training[:500]
@@ -21,6 +22,8 @@ N = np.shape(x37_train)
 # training
 n_epochs = 400
 eta = 0.01
+n_epochs = 100
+eta = 0.05
 xaxis = []
 
 # arrays for saving losses

@@ -5,19 +5,18 @@ from Equations import *
 import time
 
 x, t = load(version="train")   # Load the data
-x = x[:300]
-t = t[:300]
-print "t: ", t
+x = x[:500]
+t = t[:500]
 x_test, t_test = load(version="test")
-#x_test = x_test[:500]
-#t_test = t_test[:500]
+x_test = x_test[:500]
+t_test = t_test[:500]
 
 N = np.shape(x)[0]
 d = np.shape(x)[1]
 w = np.random.rand(1, d)
 
 # lambda
-decay = 0.1
+# decay = 0.1
 epochs = 10
 losses = []
 losses_test = []
@@ -27,17 +26,8 @@ xaxis = []
 start = time.time()
 
 for epoch in range(epochs):
-    print("Epoch: ", epoch)
-    y = forward(np.transpose(x), w)
-    print "y: ", y
-    losses.append(cost(y, t))#cost_decay(y, t, decay, w))
-    losses_test.append(cost_decay(forward(np.transpose(x_test), w), t_test, decay, w))
     xaxis.append(epoch)
 
-    grE = gradient_e_decay(y, t, x, decay, w)
-    H = hessian(x, y, decay)
-    H_inv = np.linalg.inv(H.astype(float))
-    w = w - np.transpose(np.matmul(H_inv, np.transpose(grE)))
 
 
 # Compute and plot results:
@@ -58,3 +48,8 @@ plt.xlabel('number of epochs')
 plt.ylabel('loss')
 plt.legend()
 plt.show()
+
+
+
+
+
