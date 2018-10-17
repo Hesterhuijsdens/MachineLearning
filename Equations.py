@@ -58,6 +58,7 @@ def hessian(x, y, decay, d):   # with weight decay
     return H
 
 
+# percentage falsely classified
 def classification_error(y, t):
     mistakes = 0
     for i in range(np.shape(y)[1]):
