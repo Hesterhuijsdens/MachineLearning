@@ -17,9 +17,11 @@ t37_val = t37_training[501:600]
 w = np.random.randn(1, np.shape(x37_train)[1])
 
 # total number of patterns
-N = np.shape(x37_train)[0]
+N = np.shape(x37_train)
 
 # training
+n_epochs = 400
+eta = 0.01
 n_epochs = 100
 eta = 0.05
 xaxis = []
@@ -27,16 +29,24 @@ xaxis = []
 # arrays for saving losses
 train_loss = np.zeros(n_epochs)
 val_loss = np.zeros(n_epochs)
+dW = 0
 for epoch in range(n_epochs):
 
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
 
     # backward propagation
-    dW = backward(x37_train, y37_train, t37_train)
+    gradE = backward(x37_train, y37_train, t37_train)
 
     # weight update
-    w = w - (eta * dW)
+    # w = w - (eta * gradE)
+
+    # dW = -eta * gradE
+
+    # weight update with momentum
+    alpha = 0.9
+    dW = -eta * gradE + alpha * dW
+    w = w + dW
 
     # compute loss
     train_loss[epoch] = cost(y37_train, t37_train)
@@ -45,6 +55,10 @@ for epoch in range(n_epochs):
     y37_val = forward(np.transpose(x37_val), w)
     val_loss[epoch] = cost(y37_val, t37_val)
 
+# Compute results:
+class_err = classification_error(y37_train, t37_train)
+print("class_err: ", class_err)
+print train_loss[99], val_loss[99]
 
 plt.figure(0)
 plt.plot(xaxis, train_loss)
