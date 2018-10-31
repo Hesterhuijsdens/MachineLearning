@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from PreprocessData import load
 from Equations import *
 import time
-from scipy.optimize import line_search, minimize
 
 
 # load train and test data:
@@ -21,7 +20,7 @@ w = np.random.rand(1, d)
 
 # set parameters:
 # decay = 0.1
-epochs = 200
+epochs = 250
 losses = []
 losses_test = []
 xaxis = []
@@ -48,9 +47,11 @@ for epoch in range(epochs):
 # compute and plot results:
 class_err = classification_error(y, t)
 print("class_err: ", class_err)
+print("E: ", cost(y, t))
 
 class_err_test = classification_error(forward(np.transpose(x_test), w), t_test)
 print("class_err_test: ", class_err_test)
+print("E test: ", cost(forward(np.transpose(x_test), w), t_test))
 
 # stop time:
 end = time.time()
@@ -59,7 +60,9 @@ print("time: ", end - start)
 plt.figure(1)
 plt.plot(xaxis, losses, label='train')
 plt.plot(xaxis, losses_test, label='test')
+plt.title('Loss for line search')
 plt.xlabel('number of epochs')
 plt.ylabel('loss')
 plt.legend()
 plt.show()
+

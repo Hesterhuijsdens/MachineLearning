@@ -1,6 +1,7 @@
 import numpy as np
 import math
 
+
 # fully connected layer
 def linear(x, w):
     return np.dot(w, x)
@@ -41,7 +42,8 @@ def cost_decay(y, t, decay, w):
 # the gradient; backward propagation computes the backward pass for a one-layer network
 # with sigmoid units and loss
 def backward(x, y, t):
-    return np.dot((y - np.transpose(t)), x)
+    N = np.shape(t)[0]
+    return (1.0/N) * np.dot((y[0] - np.transpose(t)), x)
 
 
 # the gradient of E with weight decay:

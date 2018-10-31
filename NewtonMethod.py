@@ -18,7 +18,7 @@ d = np.shape(x)[1]
 w = np.random.rand(1, d)
 
 # set parameters:
-decay = 0.01
+decay = 0.1
 epochs = 10
 losses = []
 losses_test = []
@@ -45,16 +45,19 @@ for epoch in range(epochs):
     H_grE = np.transpose(np.matmul(H_inv, np.transpose(grE)))
 
     # use momentum to update weights
-    dW = -0.05 * H_grE + 0.9 * dW
+    dW = -0.2 * H_grE + 0.2 * dW
     w = w + dW
 
 
 # compute and plot results:
 class_err = classification_error(y, t)
 print("class_err: ", class_err)
+print("E: ", cost(y, t))
+
 
 class_err_test = classification_error(forward(np.transpose(x_test), w), t_test)
 print("class_err_test: ", class_err_test)
+print("E test: ", cost(forward(np.transpose(x_test), w), t_test))
 
 # stop time:
 end = time.time()
@@ -65,5 +68,6 @@ plt.plot(xaxis, losses, label='train')
 plt.plot(xaxis, losses_test, label='test')
 plt.xlabel('number of epochs')
 plt.ylabel('loss')
+plt.title('Loss for Newton method with decay = ' + str(decay))
 plt.legend()
 plt.show()
