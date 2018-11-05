@@ -26,6 +26,11 @@ def cost(y, t):
     return (-1.0 / N) * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
 
 
+# weight decay: error function with regularization
+# def cost_reg(y, t, reg, w):
+#     return cost(y, t) + (reg/2) * np.dot(w, np.transpose(w))
+
+
 #  loss function with weight decay
 def cost_decay(y, t, decay, w):
     N = np.shape(t)[0]
@@ -65,7 +70,7 @@ def hessian(x, y, decay):
     return (1.0 / N) * (formula_inside + np.sum(decay / np.arange(1, N + 1)) * np.identity(d))
 
 
-# computes the percentage of misclassified patterns (for NewtonMethod):
+# computes the percentage of misclassified patterns
 def classification_error(y, t):
     mistakes = 0
     for i in range(np.shape(y)[1]):
