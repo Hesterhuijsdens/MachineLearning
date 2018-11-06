@@ -1,5 +1,6 @@
 from mnist import MNIST
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 
@@ -15,7 +16,9 @@ def normalize(x): # Rescale to [0,1] range
 
 # Load mnist data and select 3/7:
 def load(version="train"):
-    data = MNIST('data')
+    if version == "train":
+        os.chdir("..")
+    data = MNIST(os.path.abspath(os.curdir) + "\data")
     if version == "train":
         x, y = data.load_training()
         nr = 12396

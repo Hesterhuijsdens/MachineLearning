@@ -1,7 +1,6 @@
 import numpy as np
 import math
 
-
 # fully connected layer
 def linear(x, w):
     return np.dot(w, x)
