@@ -16,7 +16,8 @@ def normalize(x): # Rescale to [0,1] range
 
 # Load mnist data and select 3/7:
 def load(version="train"):
-    os.chdir("..")
+    if version == "train":
+        os.chdir("..")
     data = MNIST(os.path.abspath(os.curdir) + "\data")
     if version == "train":
         x, y = data.load_training()
