@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-import numpy as np
+
+from Assignment2.Equations_mlp import *
 from PreprocessData import load
-from Equations_mlp import *
 
 # avoid overflow warnings
 np.seterr(all="ignore")

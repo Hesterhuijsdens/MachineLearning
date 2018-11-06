@@ -37,7 +37,6 @@ dW, dWm, dWwd, dWwdm = (0 for i in range(4))
 
 xaxis = []
 for epoch in range(n_epochs):
-
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
     y37_train_m = forward(np.transpose(x37_train), wm)
