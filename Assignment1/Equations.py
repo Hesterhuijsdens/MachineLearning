@@ -18,12 +18,12 @@ def forward(x, w):
     return sigmoid(linear(x, w))
 
 
-# loss function
+# loss function E(w):
 def cost(y, t):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
     N = np.shape(t)[0]
-    return (-1.0 / N) * (np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0])))
+    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
 
 
 # weight decay: error function with regularization
@@ -33,14 +33,14 @@ def cost(y, t):
 
 #  loss function with weight decay
 def cost_decay(y, t, decay, w):
-    N = np.shape(t)[0]
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
-    cost_without = (-1.0 / N) * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
+    N = np.shape(t)[0]
+    cost_without = np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
     sum = 0
     for n in range(1, N + 1):
-        sum += (decay/(2*n)) * np.dot(w[0, 0:n], w[0, 0:n])
-    return cost_without - (1.0/N) * sum
+        sum += (decay/(2*n)) * np.dot(w[0, 0:n+1], w[0, 0:n+1])
+    return (-1.0 / N) * (cost_without + sum)
 
 
 # the gradient; backward propagation computes the backward pass for a one-layer network

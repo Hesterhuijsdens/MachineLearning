@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
-from PreprocessData import load
+from PreprocessData import load37
 from Equations import *
 
 # avoid overflow warnings
 np.seterr(all="ignore")
 
 # load data (N=12396L)
-x37_training, t37_training = load()
+x37_training, t37_training = load37(version="train")
 
 # bounds train and validation set
 lb = 9999
@@ -77,8 +77,8 @@ for epoch in range(n_epochs):
     # compute loss
     train_loss[epoch] = cost(y37_train, t37_train)
     train_loss_m[epoch] = cost(y37_train_m, t37_train)
-    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=0.8, w=wwd)
-    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=0.8, w=wwdm)
+    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=alpha, w=wwd)
+    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=alpha, w=wwdm)
     xaxis.append(epoch)
 
     # val on w
