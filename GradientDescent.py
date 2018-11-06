@@ -11,6 +11,8 @@ x37_training, t37_training = load()
 # bounds train and validation set
 lb = 9999
 ub = np.shape(x37_training)[0] - 1
+# lb = 999
+# ub = 1299
 x37_train = x37_training[:lb]
 t37_train = t37_training[:lb]
 x37_val = x37_training[lb+1:ub]
@@ -20,8 +22,8 @@ t37_val = t37_training[lb+1:ub]
 N = np.shape(x37_train)
 
 # hyper parameters
-n_epochs = 5000
-eta = 0.0005
+n_epochs = 1000
+eta = 20
 alpha = 0.1
 
 # arrays for saving losses and predictions
@@ -76,8 +78,8 @@ for epoch in range(n_epochs):
     # compute loss
     train_loss[epoch] = cost(y37_train, t37_train)
     train_loss_m[epoch] = cost(y37_train_m, t37_train)
-    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=alpha, w=wwd)
-    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=alpha, w=wwdm)
+    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=0.8, w=wwd)
+    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=0.8, w=wwdm)
     xaxis.append(epoch)
 
     # val on w
@@ -116,6 +118,7 @@ print train_loss_wdm[n_epochs-1], val_loss_wdm[n_epochs-1]
 
 # gradient descent
 plt.figure(0)
+# plt.title("N=%i iterations" %n_epochs)
 plt.subplot(2, 2, 1)
 plt.plot(xaxis, train_loss)
 plt.plot(xaxis, val_loss)

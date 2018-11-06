@@ -24,7 +24,7 @@ def cost(y, t):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
     N = np.shape(t)[0]
-    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
+    return (-1.0 / N) * (np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0])))
 
 
 # weight decay: error function with regularization
