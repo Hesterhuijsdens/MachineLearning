@@ -107,3 +107,10 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
     return (b + a) / 2
 
 
+# function to compute beta using Polak-Ribiere rule:
+def polak_ribiere(old_decay, new_decay):
+    magnitude = np.linalg.norm(old_decay)
+    beta = ((new_decay - old_decay) * new_decay) / np.power(magnitude, 2)
+    return beta
+
+

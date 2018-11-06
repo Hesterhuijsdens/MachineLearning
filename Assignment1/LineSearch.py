@@ -28,10 +28,11 @@ xaxis = []
 start = time.time()
 
 for epoch in range(epochs):
-    print epoch
+    if epoch % 10 == 0:
+        print "Epoch: ", epoch
+
     # forward computation and losses:
     y = forward(np.transpose(x), w)
-    print "y: ", y[0]
     losses.append(cost_decay(y, t, decay, w))
     y_test = forward(np.transpose(x_test), w)
     losses_test.append(cost_decay(y_test, t_test, decay, w))

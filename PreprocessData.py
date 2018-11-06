@@ -35,7 +35,6 @@ def load37(version="train"):
     data7 = [normalize(x7), y7]
 
     data = np.concatenate((data3, data7), axis=1)
-    print np.shape(data)
     np.take(data, np.random.permutation(np.shape(data)[1]), axis=1, out=data)
     dataX = np.zeros((nr, 784))
     for i in range(nr):
