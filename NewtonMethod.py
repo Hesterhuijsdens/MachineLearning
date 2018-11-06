@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from PreprocessData import load
 from Equations import *
 import time
+from sklearn.metrics import log_loss
 
 # load train and test data:
 x, t = load(version="train")
@@ -33,9 +34,11 @@ for epoch in range(epochs):
 
     # forward computation and losses:
     y = forward(np.transpose(x), w)
-    losses.append(cost(y, t))
+    losses.append(log_loss(t, y[0]))
+    #losses.append(cost(y, t))
     y_test = forward(np.transpose(x_test), w)
-    losses_test.append(cost(y_test, t_test))
+    losses_test.append(log_loss(t_test, y_test[0]))
+   # losses_test.append(cost(y_test, t_test))
     xaxis.append(epoch)
 
     # compute gradient and hessian and update the weights:
@@ -45,9 +48,8 @@ for epoch in range(epochs):
     H_grE = np.transpose(np.matmul(H_inv, np.transpose(grE)))
 
     # use momentum to update weights
-    dW = -0.2 * H_grE + 0.2 * dW
+    dW = -0.05 * H_grE + 0.1 * dW
     w = w + dW
-
 
 # compute and plot results:
 class_err = classification_error(y, t)
