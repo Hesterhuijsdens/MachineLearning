@@ -8,7 +8,7 @@ def linear(x, w):
 
 # sigmoid
 def sigmoid(a):
-    return 1.0 / (1 + np.exp(-a.astype(float)))
+    return 1.0 / (1.0 + np.exp(-a.astype(float)))
 
 
 # forward propagation
@@ -74,10 +74,13 @@ def hessian(x, y, decay):
 # computes the percentage of misclassified patterns
 def classification_error(y, t):
     mistakes = 0
+    print np.shape(y)
+    print y[0, 5]
+    print t[5]
     for i in range(np.shape(y)[1]):
         if (y[0, i] > 0.5 and t[i] == 0) or (y[0, i] < 0.5 and t[i] == 1):
             mistakes += 1
-    return float(mistakes) / np.shape(y)[1]
+    return (float(mistakes) / np.shape(y)[1]) * 100.0
 
 
 # same error function but more convenient for golden_section search -> should still be changed
