@@ -9,7 +9,7 @@ np.seterr(all="ignore")
 x37_training, t37_training = load37(version="train")
 
 # bounds train and validation set
-lb = 9999
+lb = 300
 ub = np.shape(x37_training)[0] - 1
 # lb = 999
 # ub = 1299
@@ -22,9 +22,10 @@ t37_val = t37_training[lb+1:ub]
 N = np.shape(x37_train)
 
 # hyper parameters
-n_epochs = 1000
-eta = 20
+n_epochs = 300
+eta = 1
 alpha = 0.1
+decay = 0.1
 
 # arrays for saving losses and predictions
 train_loss, train_loss_m, val_loss, val_loss_m, train_loss_wd, val_loss_wd, train_loss_wdm, val_loss_wdm = \
@@ -35,10 +36,11 @@ y37, y37_m, y37_wd, y37_wdm = (0 for i in range(4))
 w, wm, wwd, wwdm = (np.random.randn(1, np.shape(x37_train)[1]) for weights in range(4))
 
 # initialize gradients
-dW, dWm, dWwd, dWwdm = (0 for i in range(4))
+dW, dWm, dWwd, dWwdm = (np.random.randn(1) for i in range(4))
 
 xaxis = []
 for epoch in range(n_epochs):
+    print epoch
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
     y37_train_m = forward(np.transpose(x37_train), wm)
@@ -55,8 +57,8 @@ for epoch in range(n_epochs):
     # backward propagation
     gradE = backward(x37_train, y37_train, t37_train)
     gradE_m = backward(x37_train, y37_train_m, t37_train)
-    gradE_wd = backward(x37_train, y37_train_wd, t37_train)
-    gradE_wdm = backward(x37_train, y37_train_wdm, t37_train)
+    gradE_wd = gradient_e_decay(y37_train_wd, t37_train, x37_train, decay, wwd)#backward(x37_train, y37_train_wd, t37_train)
+    gradE_wdm = gradient_e_decay(y37_train_wdm, t37_train, x37_train, decay, wwdm)#backward(x37_train, y37_train_wdm, t37_train)
 
     # weight update (regular)
     dW = -eta * gradE
@@ -77,8 +79,8 @@ for epoch in range(n_epochs):
     # compute loss
     train_loss[epoch] = cost(y37_train, t37_train)
     train_loss_m[epoch] = cost(y37_train_m, t37_train)
-    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=alpha, w=wwd)
-    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=alpha, w=wwdm)
+    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=0.1, w=wwd)
+    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=0.1, w=wwdm)
     xaxis.append(epoch)
 
     # val on w
@@ -91,11 +93,11 @@ for epoch in range(n_epochs):
 
     # val on wwd
     y37_val_wd = forward(np.transpose(x37_val), wwd)
-    val_loss_wd[epoch] = cost_decay(y37_val_wd, t37_val, decay=alpha, w=wwd)
+    val_loss_wd[epoch] = cost_decay(y37_val_wd, t37_val, decay=0.1, w=wwd)
 
     # val on wwdm
     y37_val_wdm = forward(np.transpose(x37_val), wwdm)
-    val_loss_wdm[epoch] = cost_decay(y37_val_wdm, t37_val, decay=alpha, w=wwdm)
+    val_loss_wdm[epoch] = cost_decay(y37_val_wdm, t37_val, decay=0.1, w=wwdm)
 
 # compute results
 class_err = classification_error(y37, t37_train)
@@ -121,8 +123,8 @@ plt.figure(0)
 plt.subplot(2, 2, 1)
 plt.plot(xaxis, train_loss)
 plt.plot(xaxis, val_loss)
-plt.legend(["training set", "val set"])
-plt.title("Gradient Descent (eta=%1.3f)" %eta)
+plt.legend(["train", "test"])
+plt.title("Gradient descent (eta=%1.3f)" %eta)
 plt.xlabel("N")
 plt.ylabel("loss")
 
@@ -131,7 +133,7 @@ plt.ylabel("loss")
 plt.subplot(2, 2, 2)
 plt.plot(xaxis, train_loss_m)
 plt.plot(xaxis, val_loss_m)
-plt.legend(["training set", "val set"])
+plt.legend(["train", "test"])
 plt.title("Momentum (alpha=%1.3f)" %alpha)
 plt.xlabel("N")
 plt.ylabel("loss")
@@ -141,7 +143,7 @@ plt.ylabel("loss")
 plt.subplot(2, 2, 3)
 plt.plot(xaxis, train_loss_wd)
 plt.plot(xaxis, val_loss_wd)
-plt.legend(["training set", "val set"])
+plt.legend(["train", "test"])
 plt.title("Weight decay")
 plt.xlabel("N")
 plt.ylabel("loss")
@@ -151,7 +153,7 @@ plt.ylabel("loss")
 plt.subplot(2, 2, 4)
 plt.plot(xaxis, train_loss_wdm)
 plt.plot(xaxis, val_loss_wdm)
-plt.legend(["training set", "val set"])
+plt.legend(["train", "test"])
 plt.title("Weight decay + momentum (alpha=%1.3f)" %alpha)
 plt.xlabel("N")
 plt.ylabel("loss")

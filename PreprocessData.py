@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 
 
+# function to normalize the MNIST data:
 def normalize(x, axis=-1, order=2):
     l2 = np.atleast_1d(np.linalg.norm(x, order, axis))
     l2[l2 == 0] = 1

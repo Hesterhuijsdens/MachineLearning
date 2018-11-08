@@ -74,22 +74,10 @@ def hessian(x, y, decay):
 # computes the percentage of misclassified patterns
 def classification_error(y, t):
     mistakes = 0
-    print np.shape(y)
-    print y[0, 5]
-    print t[5]
     for i in range(np.shape(y)[1]):
         if (y[0, i] > 0.5 and t[i] == 0) or (y[0, i] < 0.5 and t[i] == 1):
             mistakes += 1
     return (float(mistakes) / np.shape(y)[1]) * 100.0
-
-
-# same error function but more convenient for golden_section search -> should still be changed
-def error_function(w, x, t):
-    N = np.shape(x)[0]
-    y = forward(np.transpose(x), w)
-    y[y < 0.001] = 0.001
-    y[y > 0.999] = 0.999
-    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
 
 
 # to compute the step size for line search:
@@ -99,7 +87,12 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
     d = a + (b - a) / ratio
 
     while abs(c - d) > tolerance:
-        if error_function(w + direction * c, x, t) < error_function(w + direction * d, x, t):
+        # cost(y, t)
+        # error_function(w, x, t)
+        y_c = forward(np.transpose(x), w + direction * c)
+        y_d = forward(np.transpose(x), w + direction * d)
+
+        if cost(y_c, t) < cost(y_d, t):
             b = d
         else:
             a = c
