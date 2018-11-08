@@ -18,7 +18,7 @@ d = np.shape(x)[1]
 
 # set parameters:
 decay = 0.1
-epochs = 200 # 5000
+epochs = 10 # 5000
 eta = 1
 alpha = 0.1
 nr_of_batches = 100
@@ -32,7 +32,7 @@ xaxis = []
 w, wm, wwd, wwdm = (np.random.randn(1, d) for weights in range(4))
 
 # initialize predictions
-y, ym, ywd, ywdm = (np.zeros((1, d)) for i in range(4))
+y, ym, ywd, ywdm = (np.zeros((1,N)) for i in range(4))
 
 # initialize gradients
 dW, dWm, dWwd, dWwdm = (np.random.randn(1) for i in range(4))
@@ -43,23 +43,23 @@ start = time.time()
 for epoch in range(epochs):
     print "Epoch: ", epoch
 
-    for batch_nr in range(0, N, nr_of_batches):
+# 0 - 300 - 100
+    for batch_nr in np.linspace(0, N-3, nr_of_batches):
+
         # get minibatch:
-        batch_x = x[batch_nr:batch_nr + nr_of_batches]
-        batch_t = t[batch_nr:batch_nr + nr_of_batches]
-        print np.shape(batch_x)
-        print np.shape(w)
-        print " "
-        y[0, batch_nr:batch_nr + nr_of_batches] = forward(np.transpose(batch_x), w)
-        ym[0, batch_nr:batch_nr + nr_of_batches] = forward(np.transpose(batch_x), wm)
-        ywd[0, batch_nr:batch_nr + nr_of_batches] = forward(np.transpose(batch_x), wwd)
-        ywdm[0, batch_nr:batch_nr + nr_of_batches] = forward(np.transpose(batch_x), wwdm)
+        batch_x = x[int(batch_nr):int(batch_nr + N/nr_of_batches)]
+        batch_t = t[int(batch_nr):int(batch_nr + N/nr_of_batches)]
+
+        y[0, int(batch_nr):int(batch_nr + N/nr_of_batches)] = forward(np.transpose(batch_x), w)
+        ym[0, int(batch_nr):int(batch_nr + N/nr_of_batches)] = forward(np.transpose(batch_x), wm)
+        ywd[0, int(batch_nr):int(batch_nr + N/nr_of_batches)] = forward(np.transpose(batch_x), wwd)
+        ywdm[0, int(batch_nr):int(batch_nr + N/nr_of_batches)] = forward(np.transpose(batch_x), wwdm)
 
         # backward propagation:
-        gradE = backward(batch_x, y[0, batch_nr:batch_nr + nr_of_batches], batch_t)
-        gradE_m = backward(batch_x, ym[0, batch_nr:batch_nr + nr_of_batches], batch_t)
-        gradE_wd = gradient_e_decay(ywd[0, batch_nr:batch_nr + nr_of_batches], batch_t, batch_x, decay, wwd)
-        gradE_wdm = gradient_e_decay(ywd[0, batch_nr:batch_nr + nr_of_batches], batch_t, batch_x, decay, wwdm)
+        gradE = backward(batch_x, y[0, int(batch_nr):int(batch_nr + N/nr_of_batches)], batch_t)
+        gradE_m = backward(batch_x, ym[0, int(batch_nr):int(batch_nr + N/nr_of_batches)], batch_t)
+        gradE_wd = gradient_e_decay(ywd[0, int(batch_nr):int(batch_nr + N/nr_of_batches)], batch_t, batch_x, decay, wwd)
+        gradE_wdm = gradient_e_decay(ywd[0, int(batch_nr):int(batch_nr + N/nr_of_batches)], batch_t, batch_x, decay, wwdm)
 
         # weight update (regular)
         dW = -eta * gradE
@@ -78,8 +78,6 @@ for epoch in range(epochs):
         wwdm = wwdm + dWwdm
 
     # compute loss
-    print "y: ", np.shape(y)
-    print "t: ", np.shape(t)
     train_loss[epoch] = cost(y, t)
     train_loss_m[epoch] = cost(ym, t)
     train_loss_wd[epoch] = cost_decay(ywd, t, decay, wwd)
