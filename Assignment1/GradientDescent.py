@@ -1,28 +1,29 @@
 import matplotlib.pyplot as plt
 from PreprocessData import load37
 from Equations import *
+import time
 
 # avoid overflow warnings
 np.seterr(all="ignore")
 
 # load data (N=12396L)
-x37_training, t37_training = load37(version="train")
-
+x37_train, t37_train = load37(version="train")
+x37_val, t37_val = load37(version="test")
 # bounds train and validation set
-lb = 300
-ub = np.shape(x37_training)[0] - 1
+#lb = 300
+#ub = np.shape(x37_training)[0] - 1
 # lb = 999
 # ub = 1299
-x37_train = x37_training[:lb]
-t37_train = t37_training[:lb]
-x37_val = x37_training[lb+1:ub]
-t37_val = t37_training[lb+1:ub]
+# x37_train = x37_training[:lb]
+# t37_train = t37_training[:lb]
+# x37_val = x37_training[lb+1:ub]
+# t37_val = t37_training[lb+1:ub]
 
 # total number of patterns
 N = np.shape(x37_train)
 
 # hyper parameters
-n_epochs = 300
+n_epochs = 500
 eta = 1
 alpha = 0.1
 decay = 0.1
@@ -39,6 +40,11 @@ w, wm, wwd, wwdm = (np.random.randn(1, np.shape(x37_train)[1]) for weights in ra
 dW, dWm, dWwd, dWwdm = (np.random.randn(1) for i in range(4))
 
 xaxis = []
+
+
+# Start time:
+start = time.time()
+
 for epoch in range(n_epochs):
     print epoch
     # forward propagation
@@ -99,6 +105,10 @@ for epoch in range(n_epochs):
     y37_val_wdm = forward(np.transpose(x37_val), wwdm)
     val_loss_wdm[epoch] = cost_decay(y37_val_wdm, t37_val, decay=0.1, w=wwdm)
 
+# stop time:
+end = time.time()
+print "time: ", end - start
+
 # compute results
 class_err = classification_error(y37, t37_train)
 print("class_err: ", class_err)
@@ -115,7 +125,6 @@ print train_loss_wd[n_epochs-1], val_loss_wd[n_epochs-1]
 class_err = classification_error(y37_wdm, t37_train)
 print("class_err_wdm: ", class_err)
 print train_loss_wdm[n_epochs-1], val_loss_wdm[n_epochs-1]
-
 
 # gradient descent
 plt.figure(0)
