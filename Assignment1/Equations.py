@@ -9,7 +9,7 @@ def linear(x, w):
 
 # sigmoid
 def sigmoid(a):
-    return 1.0 / (1 + np.exp(-a.astype(float)))
+    return 1.0 / (1.0 + np.exp(-a.astype(float)))
 
 
 # forward propagation
@@ -19,12 +19,16 @@ def forward(x, w):
     return sigmoid(linear(x, w))
 
 
-# loss function
+# loss function E(w):
 def cost(y, t):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
     N = np.shape(t)[0]
+<<<<<<< HEAD
     return (-1.0 / N) * (np.sum((t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))))
+=======
+    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
+>>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
 
 
 # weight decay: error function with regularization
@@ -34,14 +38,18 @@ def cost(y, t):
 
 #  loss function with weight decay
 def cost_decay(y, t, decay, w):
-    N = np.shape(t)[0]
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
+<<<<<<< HEAD
     cost_without = (-1.0 / N) * (np.sum((t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))))
+=======
+    N = np.shape(t)[0]
+    cost_without = np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
+>>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
     sum = 0
     for n in range(1, N + 1):
-        sum += (decay/(2*n)) * np.dot(w[0, 0:n], w[0, 0:n])
-    return cost_without - (1.0/N) * sum
+        sum += (decay/(2*n)) * np.dot(w[0, 0:n+1], w[0, 0:n+1])
+    return (-1.0 / N) * (cost_without + sum)
 
 
 # the gradient; backward propagation computes the backward pass for a one-layer network
@@ -78,16 +86,7 @@ def classification_error(y, t):
     for i in range(np.shape(y)[1]):
         if (y[0, i] > 0.5 and t[i] == 0) or (y[0, i] < 0.5 and t[i] == 1):
             mistakes += 1
-    return float(mistakes) / np.shape(y)[1]
-
-
-# same error function but more convenient for golden_section search -> should still be changed
-def error_function(w, x, t):
-    N = np.shape(x)[0]
-    y = forward(np.transpose(x), w)
-    y[y < 0.001] = 0.001
-    y[y > 0.999] = 0.999
-    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
+    return (float(mistakes) / np.shape(y)[1]) * 100.0
 
 
 # to compute the step size for line search:
@@ -97,7 +96,12 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
     d = a + (b - a) / ratio
 
     while abs(c - d) > tolerance:
-        if error_function(w + direction * c, x, t) < error_function(w + direction * d, x, t):
+        # cost(y, t)
+        # error_function(w, x, t)
+        y_c = forward(np.transpose(x), w + direction * c)
+        y_d = forward(np.transpose(x), w + direction * d)
+
+        if cost(y_c, t) < cost(y_d, t):
             b = d
         else:
             a = c
@@ -108,6 +112,7 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
     return (b + a) / 2
 
 
+<<<<<<< HEAD
 def testing(x, w, t):
     y = forward(np.transpose(x), w)
     accuracy = 0
@@ -119,5 +124,12 @@ def testing(x, w, t):
 
 
 
+=======
+# function to compute beta using Polak-Ribiere rule:
+def polak_ribiere(old_decay, new_decay):
+    magnitude = np.linalg.norm(old_decay)
+    beta = ((new_decay - old_decay) * new_decay) / np.power(magnitude, 2)
+    return beta
+>>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
 
 

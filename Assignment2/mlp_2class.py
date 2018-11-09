@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 from Assignment2.Equations_mlp import *
-from PreprocessData import load
+from PreprocessData import load37
 
 # avoid overflow warnings
 np.seterr(all="ignore")
 
 
 # load data (N=12396L)
-x37_training, t37_training = load()
+x37_training, t37_training = load37()
 # lb = 499
 # ub = 599
 
