@@ -6,14 +6,15 @@ import time
 # avoid overflow warnings
 np.seterr(all="ignore")
 
-<<<<<<< HEAD
 # load train (N=12396L) and test (N=2038) data
-x37_training, t37_training = load(version="train")
-x37_test, t37_test = load(version="test")
+x37_training, t37_training = load37(version="train")
+x37_test, t37_test = load37(version="test")
 
 # 80 train : 20 validation
-lb = 9917
-ub = np.shape(x37_training)[0] - 1
+# lb = 9917
+# ub = np.shape(x37_training)[0] - 1
+lb = 999
+ub = 1299
 x37_train = x37_training[:lb]
 t37_train = t37_training[:lb]
 x37_val = x37_training[lb+1:ub]
@@ -25,10 +26,11 @@ eta = 17
 alpha = 0.1
 N = np.shape(x37_train)
 xaxis = []
-=======
+decay = 0.8
+
 # load data (N=12396L)
-x37_train, t37_train = load37(version="train")
-x37_val, t37_val = load37(version="test")
+# x37_train, t37_train = load37(version="train")
+# x37_val, t37_val = load37(version="test")
 # bounds train and validation set
 #lb = 300
 #ub = np.shape(x37_training)[0] - 1
@@ -38,16 +40,6 @@ x37_val, t37_val = load37(version="test")
 # t37_train = t37_training[:lb]
 # x37_val = x37_training[lb+1:ub]
 # t37_val = t37_training[lb+1:ub]
-
-# total number of patterns
-N = np.shape(x37_train)
-
-# hyper parameters
-n_epochs = 500
-eta = 1
-alpha = 0.1
-decay = 0.1
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
 
 # arrays for saving losses and predictions
 train_loss, train_loss_m, val_loss, val_loss_m, train_loss_wd, val_loss_wd, train_loss_wdm, val_loss_wdm = \
@@ -60,18 +52,11 @@ w, wm, wwd, wwdm = (np.random.randn(1, np.shape(x37_train)[1]) for weights in ra
 # initialize gradients
 dW, dWm, dWwd, dWwdm = (np.random.randn(1) for i in range(4))
 
-<<<<<<< HEAD
-# training
-=======
-xaxis = []
-
 
 # Start time:
 start = time.time()
 
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
 for epoch in range(n_epochs):
-    print epoch
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
     y37_train_m = forward(np.transpose(x37_train), wm)
@@ -110,13 +95,10 @@ for epoch in range(n_epochs):
     # compute loss
     train_loss[epoch] = cost(y37_train, t37_train)
     train_loss_m[epoch] = cost(y37_train_m, t37_train)
-<<<<<<< HEAD
     train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=alpha, w=wwd)
     train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=alpha, w=wwdm)
-=======
     train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=0.1, w=wwd)
     train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=0.1, w=wwdm)
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
     xaxis.append(epoch)
 
     # val on w
@@ -166,11 +148,8 @@ print "GD + M + WD"
 class_err = classification_error(y37_wdm, t37_train)
 print("class_err_wdm: ", class_err)
 print train_loss_wdm[n_epochs-1], val_loss_wdm[n_epochs-1]
-<<<<<<< HEAD
 print "accuracy: ", testing(x37_test, wwdm, t37_test), "%"
 print " "
-=======
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
 
 # gradient descent
 plt.figure()

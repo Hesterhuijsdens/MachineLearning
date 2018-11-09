@@ -24,11 +24,10 @@ def cost(y, t):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
     N = np.shape(t)[0]
-<<<<<<< HEAD
     return (-1.0 / N) * (np.sum((t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))))
-=======
-    return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
+
+    # return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
+
 
 
 # weight decay: error function with regularization
@@ -40,12 +39,10 @@ def cost(y, t):
 def cost_decay(y, t, decay, w):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
-<<<<<<< HEAD
-    cost_without = (-1.0 / N) * (np.sum((t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))))
-=======
     N = np.shape(t)[0]
+    # cost_without = (-1.0 / N) * (np.sum((t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))))
+
     cost_without = np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
     sum = 0
     for n in range(1, N + 1):
         sum += (decay/(2*n)) * np.dot(w[0, 0:n+1], w[0, 0:n+1])
@@ -112,7 +109,6 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
     return (b + a) / 2
 
 
-<<<<<<< HEAD
 def testing(x, w, t):
     y = forward(np.transpose(x), w)
     accuracy = 0
@@ -122,14 +118,11 @@ def testing(x, w, t):
     return float(accuracy) / len(t) * 100.0
 
 
-
-
-=======
 # function to compute beta using Polak-Ribiere rule:
 def polak_ribiere(old_decay, new_decay):
     magnitude = np.linalg.norm(old_decay)
     beta = ((new_decay - old_decay) * new_decay) / np.power(magnitude, 2)
     return beta
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
+
 
 

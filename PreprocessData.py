@@ -49,7 +49,6 @@ def load37(version="train"):
     t = np.reshape(data[1], (nr, 1))
     t = [1 if label == 3 else 0 for label in t]  # t = 1 if the label is 3, t = 0 if the label is 7
 
-<<<<<<< HEAD
     # Plot data
     # plt.figure()
     # for i in range(0, 10):
@@ -65,10 +64,7 @@ def load37(version="train"):
 
     return dataX, t
 
-
-
-=======
-    return dataX, t
+    # return dataX, t
 
 
 # Load all mnist data:
@@ -100,5 +96,5 @@ def load(version="train"):
 #     image = np.reshape(x7[i], [28, 28])
 #     plt.imshow(image)
 # plt.show()
->>>>>>> 04452e56a07928633aaf5a377888153626b6cfeb
+
 
