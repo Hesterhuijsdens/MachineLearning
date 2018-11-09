@@ -15,7 +15,7 @@ def linear(X, W):
 
 
 def sigmoid(A):
-    return 1 / (1 + np.exp(-A))
+    return 1.0 / (1.0 + np.exp(-A))
 
 
 def cross_entropy(Y, T):

@@ -1,6 +1,7 @@
 import numpy as np
 import math
 
+
 # fully connected layer
 def linear(x, w):
     return np.dot(w, x)
@@ -23,7 +24,7 @@ def cost(y, t):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
     N = np.shape(t)[0]
-    return (-1.0 / N) * (np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0])))
+    return (-1.0 / N) * (np.sum((t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))))
 
 
 # weight decay: error function with regularization
@@ -36,7 +37,7 @@ def cost_decay(y, t, decay, w):
     N = np.shape(t)[0]
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
-    cost_without = (-1.0 / N) * np.sum(t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))
+    cost_without = (-1.0 / N) * (np.sum((t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))))
     sum = 0
     for n in range(1, N + 1):
         sum += (decay/(2*n)) * np.dot(w[0, 0:n], w[0, 0:n])
@@ -105,5 +106,18 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
         d = a + (b - a) / ratio
 
     return (b + a) / 2
+
+
+def testing(x, w, t):
+    y = forward(np.transpose(x), w)
+    accuracy = 0
+    for i in range(len(t)):
+        if int(round(y[0, i])) == t[i]:
+            accuracy += 1
+    return float(accuracy) / len(t) * 100.0
+
+
+
+
 
 
