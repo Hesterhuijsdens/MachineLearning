@@ -113,18 +113,22 @@ print "time: ", end - start
 class_err = classification_error(y37, t37_train)
 print("class_err: ", class_err)
 print train_loss[n_epochs-1], val_loss[n_epochs-1]
+print("class_err_test: ", classification_error(y37_val, t37_val))
 
 class_err = classification_error(y37_m, t37_train)
 print("class_err_m: ", class_err)
 print train_loss_m[n_epochs-1], val_loss_m[n_epochs-1]
+print("class_err_test: ", classification_error(y37_val_m, t37_val))
 
 class_err = classification_error(y37_wd, t37_train)
 print("class_err_wd: ", class_err)
 print train_loss_wd[n_epochs-1], val_loss_wd[n_epochs-1]
+print("class_err_test: ", classification_error(y37_val_wd, t37_val))
 
 class_err = classification_error(y37_wdm, t37_train)
 print("class_err_wdm: ", class_err)
 print train_loss_wdm[n_epochs-1], val_loss_wdm[n_epochs-1]
+print("class_err_test: ", classification_error(y37_val_wdm, t37_val))
 
 # gradient descent
 plt.figure(0)
