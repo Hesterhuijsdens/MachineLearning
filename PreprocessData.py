@@ -49,7 +49,22 @@ def load37(version="train"):
     t = np.reshape(data[1], (nr, 1))
     t = [1 if label == 3 else 0 for label in t]  # t = 1 if the label is 3, t = 0 if the label is 7
 
+    # Plot data
+    # plt.figure()
+    # for i in range(0, 10):
+    #     plt.subplot(5, 2, i + 1)
+    #     if i % 2 == 0:
+    #         image = np.reshape(x3[i], [28, 28])
+    #         plt.imshow(image)
+    #     else:
+    #         image = np.reshape(x7[i], [28, 28])
+    #         plt.imshow(image)
+    # plt.suptitle('Examples of the images 3 and 7 from the MNIST dataset')
+    # plt.show()
+
     return dataX, t
+
+    # return dataX, t
 
 
 # Load all mnist data:
@@ -81,4 +96,5 @@ def load(version="train"):
 #     image = np.reshape(x7[i], [28, 28])
 #     plt.imshow(image)
 # plt.show()
+
 

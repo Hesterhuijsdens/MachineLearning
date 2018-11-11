@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-
 from Assignment2.Equations_mlp import *
 from PreprocessData import load37
 
