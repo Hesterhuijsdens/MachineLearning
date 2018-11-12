@@ -26,9 +26,6 @@ def cost(y, t):
     N = np.shape(t)[0]
     return (-1.0 / N) * (np.sum((t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))))
 
-    # return (-1.0 / N) * np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
-
-
 
 # weight decay: error function with regularization
 # def cost_reg(y, t, reg, w):
@@ -40,8 +37,6 @@ def cost_decay(y, t, decay, w):
     y[y < 0.001] = 0.001
     y[y > 0.999] = 0.999
     N = np.shape(t)[0]
-    # cost_without = (-1.0 / N) * (np.sum((t * np.log(y) + (1 - np.transpose(t)) * np.log(1 - y))))
-
     cost_without = np.sum(t * np.log(y[0]) + (1 - np.transpose(t)) * np.log(1 - y[0]))
     sum = 0
     for n in range(1, N + 1):

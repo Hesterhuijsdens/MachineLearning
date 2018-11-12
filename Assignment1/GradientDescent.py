@@ -21,12 +21,12 @@ x37_val = x37_training[lb+1:ub]
 t37_val = t37_training[lb+1:ub]
 
 # parameters
-n_epochs = 3000
-eta = 17
+n_epochs = 300 # 300 #0
+eta = 1
 alpha = 0.1
 N = np.shape(x37_train)
 xaxis = []
-decay = 0.8
+decay = 0.1
 
 # load data (N=12396L)
 # x37_train, t37_train = load37(version="train")
@@ -57,6 +57,7 @@ dW, dWm, dWwd, dWwdm = (np.random.randn(1) for i in range(4))
 start = time.time()
 
 for epoch in range(n_epochs):
+    print epoch
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
     y37_train_m = forward(np.transpose(x37_train), wm)
@@ -73,8 +74,8 @@ for epoch in range(n_epochs):
     # backward propagation
     gradE = backward(x37_train, y37_train, t37_train)
     gradE_m = backward(x37_train, y37_train_m, t37_train)
-    gradE_wd = gradient_e_decay(y37_train_wd, t37_train, x37_train, decay, wwd)#backward(x37_train, y37_train_wd, t37_train)
-    gradE_wdm = gradient_e_decay(y37_train_wdm, t37_train, x37_train, decay, wwdm)#backward(x37_train, y37_train_wdm, t37_train)
+    gradE_wd = gradient_e_decay(y37_train_wd, t37_train, x37_train, decay, wwd)
+    gradE_wdm = gradient_e_decay(y37_train_wdm, t37_train, x37_train, decay, wwdm)
 
     # weight update (regular)
     dW = -eta * gradE
@@ -95,10 +96,8 @@ for epoch in range(n_epochs):
     # compute loss
     train_loss[epoch] = cost(y37_train, t37_train)
     train_loss_m[epoch] = cost(y37_train_m, t37_train)
-    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=alpha, w=wwd)
-    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=alpha, w=wwdm)
-    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay=0.1, w=wwd)
-    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay=0.1, w=wwdm)
+    train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay, wwd)
+    train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay, wwdm)
     xaxis.append(epoch)
 
     # val on w
@@ -111,11 +110,11 @@ for epoch in range(n_epochs):
 
     # val on wwd
     y37_val_wd = forward(np.transpose(x37_val), wwd)
-    val_loss_wd[epoch] = cost_decay(y37_val_wd, t37_val, decay=0.1, w=wwd)
+    val_loss_wd[epoch] = cost_decay(y37_val_wd, t37_val, decay, wwd)
 
     # val on wwdm
     y37_val_wdm = forward(np.transpose(x37_val), wwdm)
-    val_loss_wdm[epoch] = cost_decay(y37_val_wdm, t37_val, decay=0.1, w=wwdm)
+    val_loss_wdm[epoch] = cost_decay(y37_val_wdm, t37_val, decay, wwdm)
 
 # stop time:
 end = time.time()
