@@ -56,8 +56,10 @@ dW, dWm, dWwd, dWwdm = (np.random.randn(1) for i in range(4))
 # Start time:
 start = time.time()
 
+
+
 for epoch in range(n_epochs):
-    print epoch
+    # print epoch
     # forward propagation
     y37_train = forward(np.transpose(x37_train), w)
     y37_train_m = forward(np.transpose(x37_train), wm)
