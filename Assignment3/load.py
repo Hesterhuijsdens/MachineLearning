@@ -17,6 +17,3 @@ def loadLasso(version="train"):
     return np.reshape(input, (50, 100)).astype(np.float), np.reshape(output, (50,)).astype(np.float)
 
 
-a, b = loadLasso()
-print np.shape(a)
-print np.shape(b)
