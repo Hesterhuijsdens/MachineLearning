@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import time
 
 
 # fully connected layer
@@ -104,56 +105,48 @@ def golden_section_search(a, b, w, x, t, direction, tolerance=1e-5):
     return (b + a) / 2
 
 
-def training(n_epochs, x, t, w, eta, decay, alpha):
+def training(n_epochs, x, t, x_val, t_val, w, dw, eta=1, decay=0.1, alpha=0.1, momentum=0, weightdecay=0):
+    start = time.time()
+    train_loss = np.zeros(n_epochs)
+    val_loss = np.zeros(n_epochs)
+    dW = dw
+    y_save = 0
+    y_val = 0
 
     for epoch in range(n_epochs):
         y = forward(np.transpose(x), w)
+
+        if weightdecay == 0:
+            gradE = backward(x, y, t)
+        else:
+            gradE = gradient_e_decay(y, t, x, decay, w)
+
         if epoch == n_epochs - 1:
             y_save = y
-        gradE =  backward(x, y, t)
 
+        if momentum == 0:
+            dW = -eta * gradE
+            w = w + dW
+        else:
+            dW = -eta * gradE + alpha * dW
+            w = w + dW
 
-        # weight update (regular)
-        dW = -eta * gradE
-        w = w + dW
-    #
-    #     # weight update with momentum
-    #     dWm = -eta * gradE_m + 0.1 * dWm
-    #     wm = wm + dWm
-    #
-    #     # weight update with weight decay
-    #     dWwd = -eta * gradE_wd
-    #     wwd = wwd + dWwd
-    #
-    #     # weight update with momentum and weight decay
-    #     dWwdm = -eta * gradE_wdm + 0.1 * dWwdm
-    #     wwdm = wwdm + dWwdm
-    #
-    #     # compute loss
-    #     train_loss[epoch] = cost(y37_train, t37_train)
-    #     train_loss_m[epoch] = cost(y37_train_m, t37_train)
-    #     train_loss_wd[epoch] = cost_decay(y37_train_wd, t37_train, decay, wwd)
-    #     train_loss_wdm[epoch] = cost_decay(y37_train_wdm, t37_train, decay, wwdm)
-    #     xaxis.append(epoch)
-    #
-    #     # val on w
-    #     y37_val = forward(np.transpose(x37_val), w)
-    #     val_loss[epoch] = cost(y37_val, t37_val)
-    #
-    #     # val on wm
-    #     y37_val_m = forward(np.transpose(x37_val), wm)
-    #     val_loss_m[epoch] = cost(y37_val_m, t37_val)
-    #
-    #     # val on wwd
-    #     y37_val_wd = forward(np.transpose(x37_val), wwd)
-    #     val_loss_wd[epoch] = cost_decay(y37_val_wd, t37_val, decay, wwd)
-    #
-    #     # val on wwdm
-    #     y37_val_wdm = forward(np.transpose(x37_val), wwdm)
-    #     val_loss_wdm[epoch] = cost_decay(y37_val_wdm, t37_val, decay, wwdm)
+        # compute loss
+        if weightdecay == 0:
+            train_loss[epoch] = cost(y, t)
+        else:
+            train_loss[epoch] = cost_decay(y, t, decay, w)
 
+        # validation
+        y_val = forward(np.transpose(x_val), w)
 
+        if weightdecay == 0:
+            val_loss[epoch] = cost(y_val, t_val)
+        else:
+            val_loss[epoch] = cost_decay(y_val, t_val, decay, w)
 
+    end = time.time()
+    return train_loss, y_save, val_loss, y_val, w, end, start
 
 
 def testing(x, w, t):
