@@ -30,3 +30,28 @@ def b(x, y):
     return (1.0/p) * np.matmul(np.transpose(x), y)
 
 
+def beta(beta, gamma):
+    return 0
+
+#
+def beta_estimate(b, chi, beta):
+    array_len = np.shape(chi)[0]
+    beta_pred = np.zeros(array_len)
+    for j in range(array_len):
+        sum = 0
+        for i in range(array_len):
+            if (i != j) & (beta[i] != 0.0):
+                sum += chi[i, j] * beta[i]
+        beta_pred[j] = beta[j] - sum
+    return beta_pred
+
+
+def gradient_error(N, y, beta, x):
+    test = np.matmul(y - np.matmul(x, beta), x)
+    return (-1.0 / N) * test
+
+
+    # y = (50,), beta = (100,), x = (50, 100)
+    # y - xb = (50, )
+
+
