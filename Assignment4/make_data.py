@@ -3,7 +3,7 @@ import scipy.stats as stats
 import scipy.sparse as sparse
 import matplotlib.pyplot as plt
 
-np.random.seed(0)
+np.random.seed(5)
 
 
 def sprandsym(n, density):
