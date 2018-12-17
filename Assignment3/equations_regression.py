@@ -3,7 +3,7 @@ import numpy as np
 
 # function to compute OLS:
 def ordinary_least_squares(y, x, w):
-    return np.sum(pow(y - np.dot(x, w), 2))
+    return np.sum(np.power(y - np.matmul(x, w), 2))
 
 
 # function to compute OLS with regularization term:
@@ -30,28 +30,46 @@ def b(x, y):
     return (1.0/p) * np.matmul(np.transpose(x), y)
 
 
-def beta(beta, gamma):
-    return 0
+# #
+# def beta_estimate(b, chi, w):
+#     array_len = np.shape(chi)[0]
+#     beta_pred = np.zeros(array_len)
+#     for j in range(array_len):
+#         sum = 0
+#         for i in range(array_len):
+#             if (i != j) & (w[i] != 0.0):
+#                 sum += chi[i, j] * w[i]
+#         beta_pred[j] = w[j] - sum
+#     return beta_pred
+
+
+# def gradient_error_ridge(N, y, w, x, decay):
+#     b_i = (1.0 / N) * np.matmul(np.transpose(x), y)  # slide 58
+#     Chi = chi(x)  # (100,100)
+#     lagrange = decay * (w / np.linalg.norm(w, ord=2))
+#     return -1.0 * b_i + np.matmul(Chi, w) + lagrange
 
 #
-def beta_estimate(b, chi, beta):
-    array_len = np.shape(chi)[0]
-    beta_pred = np.zeros(array_len)
-    for j in range(array_len):
-        sum = 0
-        for i in range(array_len):
-            if (i != j) & (beta[i] != 0.0):
-                sum += chi[i, j] * beta[i]
-        beta_pred[j] = beta[j] - sum
-    return beta_pred
+# def gradient_error_lasso(N, y, w, x, i, decay):
+#     b_i = (1.0/N) * np.dot(x[:, i], y) # slide 58
+#     Chi = chi(x) # (100,100)
+#     #lagrange = decay * np.sign(w[i])
+#     return -1.0 * b_i + np.dot(Chi[:, i], w)# + lagrange
 
 
-def gradient_error(N, y, beta, x):
-    test = np.matmul(y - np.matmul(x, beta), x)
-    return (-1.0 / N) * test
+# Cost function with L1-norm:
+def cost_function(N, w, x, y, decay): # slide 58: f(w)
+    cost_normal =  np.sum(np.power(y - np.matmul(w, np.transpose(x)), 2))
+    #lagrange = decay * np.sum(np.abs(w))
+    return (1.0/(2.0*N)) * cost_normal #+ lagrange
 
-
-    # y = (50,), beta = (100,), x = (50, 100)
+    # y = (50,), w = (100,), x = (50, 100)
     # y - xb = (50, )
 
 
+# function S(..) used for LASSO updates:
+def soft_threshold(b, decay):
+    if decay >= abs(b):
+        return 0
+    else:
+        return b - decay * np.sign(b)

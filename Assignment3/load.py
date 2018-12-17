@@ -1,7 +1,8 @@
 import tarfile
 import numpy as np
+from sklearn.preprocessing import normalize
 
-
+# function to load data from lasso_data.tar:
 def loadLasso(version="train"):
     files = tarfile.open('lasso_data.tar', mode='r').extractall()
 
@@ -17,3 +18,9 @@ def loadLasso(version="train"):
     return np.reshape(input, (50, 100)).astype(np.float), np.reshape(output, (50,)).astype(np.float)
 
 
+# function to normalize the data:
+def normalize2(x):
+    return normalize(x)
+    # m = np.mean(x)
+    # l2 = np.linalg.norm(x, ord=2)
+    # return (x - m)/l2
