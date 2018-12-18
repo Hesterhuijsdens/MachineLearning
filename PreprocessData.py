@@ -11,6 +11,21 @@ def normalize(x, axis=-1, order=2):
     return x / np.expand_dims(l2, axis)
 
 
+def load3(version="train"):
+    if version == "train":
+        os.chdir("..")
+    data = MNIST(os.path.abspath(os.curdir) + "\data")
+    if version == "train":
+        x, y = data.load_training()
+        nr = 12396
+    else:
+        x, y = data.load_testing()
+        nr = 2038
+
+    x3 = [x[i] for i in range(0, len(y)) if y[i] == 3]
+    data = list(normalize(x3))
+    return data
+
 # Load mnist data and select 3/7:
 def load37(version="train"):
     if version == "train":

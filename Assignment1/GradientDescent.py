@@ -38,6 +38,11 @@ tloss, ytrain, vloss, yval, weight_vector, end, start = training(n_epochs, x=x, 
 class_err = classification_error(ytrain, t)
 print "GD2, class error: ", class_err, "val class error", classification_error(yval, t_val)
 print "train loss: ", tloss[n_epochs-1], "val loss: ", vloss[n_epochs-1]
+ytest = forward(np.transpose(x_test), weight_vector)
+tcost = cost(ytest, t_test)
+print "test loss: ", tcost
+
+print "train accuracy: ", testing(x, weight_vector, t), "%"
 print "test accuracy: ", testing(x_test, weight_vector, t_test), "%"
 print "time: ", end - start
 print " "
@@ -84,7 +89,7 @@ plt.subplot(2, 2, 1)
 plt.plot(xaxis, tloss)
 plt.plot(xaxis, vloss)
 plt.legend(["train", "test"])
-plt.title("Gradient descent (eta=%1.3f)" %eta)
+plt.title("Gradient descent (eta=%1.2f)" %eta)
 plt.xlabel("N")
 plt.ylabel("loss")
 
@@ -93,7 +98,7 @@ plt.subplot(2, 2, 2)
 plt.plot(xaxis, tloss_m)
 plt.plot(xaxis, vloss_m)
 plt.legend(["train", "test"])
-plt.title("Momentum (alpha=%1.3f)" %alpha)
+plt.title("Momentum (alpha=%1.2f)" %alpha)
 plt.xlabel("N")
 plt.ylabel("loss")
 
@@ -102,7 +107,7 @@ plt.subplot(2, 2, 3)
 plt.plot(xaxis, tloss_wd)
 plt.plot(xaxis, vloss_wd)
 plt.legend(["train", "test"])
-plt.title("Weight decay(decay=%1.3f)" %decay)
+plt.title("Weight decay(decay=%1.2f)" %decay)
 plt.xlabel("N")
 plt.ylabel("loss")
 
@@ -111,7 +116,7 @@ plt.subplot(2, 2, 4)
 plt.plot(xaxis, tloss_wdm)
 plt.plot(xaxis, vloss_wdm)
 plt.legend(["train", "test"])
-plt.title("Weight decay (decay=%1.3f) + momentum (alpha=%1.3f)".format(decay, alpha))
+plt.title("Weight decay (decay=%1.3f) + momentum (alpha=%1.2f)".format(decay, alpha))
 plt.xlabel("N")
 plt.ylabel("loss")
 plt.suptitle("Gradient Descent over %i epochs" %n_epochs)

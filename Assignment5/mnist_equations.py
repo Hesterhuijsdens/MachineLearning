@@ -17,22 +17,16 @@ def E(x, w, b):
     return E
 
 
-def z(X, w, b):
-    n, p = np.shape(X)
+def F(wij, m, b):
 
-    # all possible states
-    states = list(product([-1, 1], repeat=n))
-
-    Z = 0
-    for state in states:
-        Z += np.exp(-E(state, w, b))
-    return Z
+    return 1
 
 
 def state_prob(X, w, b, pi):
     """ states of low energy should have high probs """
-    Z = z(X, w, b)
-    return 1./Z * (np.exp(-E(X[:, pi], w, b)))
+    F(w, m, b)
+    return 1./F * (np.exp(-E(X[:, pi], w, b)))
+
 
 
 def gibbs_sampling(w, b, n_gibbs=500, n_burnin=10):
@@ -82,14 +76,14 @@ def compute_expectations(X):
     return dw, db
 
 
-def log_likelihood(X, w, b):
-    n, p = np.shape(X)
-    ps = np.zeros((p, n))
-
-    # loop over patterns
-    for pi in range(p):
-        ps[pi] = state_prob(X, w, b, pi)
-    return np.mean(np.sum(np.log(ps), axis=1))
+# def log_likelihood(X, w, b):
+#     n, p = np.shape(X)
+#     ps = np.zeros((p, n))
+#
+#     # loop over patterns
+#     for pi in range(p):
+#         ps[pi] = state_prob(X, w, b, pi)
+#     return np.mean(np.sum(np.log(ps), axis=1))
 
 
 def boltzmann_train(patterns, eta, n_epochs=2000, n_gibbs=500, n_burnin=10):
@@ -105,7 +99,7 @@ def boltzmann_train(patterns, eta, n_epochs=2000, n_gibbs=500, n_burnin=10):
 
     # E(patterns[:, 2], w, b)
     # state_prob(patterns, w, b, 2)
-    print log_likelihood(patterns, w, b)
+    # print log_likelihood(patterns, w, b)
 
     # expectations under empirical distribution (training patterns)
     dE_dw, dE_db = compute_expectations(patterns)
@@ -131,12 +125,10 @@ def boltzmann_train(patterns, eta, n_epochs=2000, n_gibbs=500, n_burnin=10):
 
     # force symmetry
     w = (w + w.T) / 2
-    print log_likelihood(patterns, w, b)
+    # print log_likelihood(patterns, w, b)
     return w, b, w_list
 
 
 # Boltzmann dreaming
 def boltzmann_dream(w, b, n_epochs=20):
     return gibbs_sampling(w, b, n_gibbs=20, n_burnin=10)
-
-
