@@ -64,6 +64,7 @@ case 'sa'
 	factor=1.05 ; % increment of beta at each new chain
 
 	beta=beta_init;
+    disp(beta)
 	E_bar(1)=1;
 	t2=1;
 	while E_bar(t2) > 0,
@@ -82,11 +83,13 @@ case 'sa'
 			% E1 is energy of new state
 			E_all(t1)=E1;
 		end;
+        disp(beta)
 		E_outer(t2)=mean(E_all);
 		E_bar(t2)=std(E_all);
-		[t2 beta E_outer(t2) E_bar(t2)] % observe convergence
+		%[t2 beta E_outer(t2) E_bar(t2)] % observe convergence
 	end;
-	E_min=E_all(1) % minimal energy 
-    plot(1:t2,E_outer(1:t2),1:t2,E_bar(1:t2))
+    disp(beta)
+	%E_min=E_all(1) % minimal energy 
+    %plot(1:t2,E_outer(1:t2),1:t2,E_bar(1:t2))
 end;
 

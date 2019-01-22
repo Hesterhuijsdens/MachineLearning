@@ -1,9 +1,8 @@
 import numpy as np
 import scipy.stats as stats
 import scipy.sparse as sparse
-import matplotlib.pyplot as plt
 
-np.random.seed(5)
+np.random.seed(4)
 
 
 def sprandsym(n, density):
@@ -15,13 +14,14 @@ def sprandsym(n, density):
 
 
 def set_w(n, p):
+    """ return symmetric matrix with zero diagonal"""
     w = sprandsym(n, p)
 
     # frustrated systems
-    # w = (w > 0).astype(int) - (w < 0).astype(int)
+    w = (w > 0).astype(int) - (w < 0).astype(int)
 
     # ferro-magnetic (easy) systems
-    w = (w > 0).astype(int)
+    # w = (w > 0).astype(int)
 
     # diagonal elements to zero
     x_lil = sparse.lil_matrix(w)
