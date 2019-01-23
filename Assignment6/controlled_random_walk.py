@@ -28,7 +28,6 @@ for t in range(int(T / dt)-1):
 
     # take optimal action u:
     x_optimal.append(x_optimal[-1] + u_optimal[-1] + np.random.normal(loc=0, scale=v * dt))
-    print x_optimal[-1]
 
 plt.plot(range(int(T / dt)), x_optimal, linewidth=3, color='black')
 
