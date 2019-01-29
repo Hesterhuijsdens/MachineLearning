@@ -166,3 +166,70 @@ def polak_ribiere(old_decay, new_decay):
 
 
 
+def training_stochastic(x, t, x_val, t_val, N, nr_of_batches, momentum, weightdecay, eta, decay=0.1, alpha=1):
+    start = time.time()
+    train_loss = []
+    val_loss = []
+    w = np.random.randn(1, np.shape(x)[1])
+    dW = np.random.randn(1, np.shape(x)[1])
+    # initialize predictions
+    y, ym, ywd, ywdm = (np.zeros((1, N)) for i in range(4))
+    stop_criterion = [2, 1]
+    epoch = 0
+
+    # while crit > 1.e-1:
+    while epoch < 10 or np.round(stop_criterion[1], 6) < np.round(stop_criterion[0], 6):
+        # track progress
+        if epoch % 1000 == 0:
+            print "Epoch: ", epoch, stop_criterion
+
+        # shuffle all data:
+        shuffle_sequence = np.random.permutation(np.shape(x)[0])
+        x = x[shuffle_sequence]
+        t = np.array(t)
+        t = t[shuffle_sequence]
+
+        for batch_nr in np.linspace(0, N - (N / nr_of_batches), nr_of_batches):
+            # get minibatch:
+            batch_x = x[int(batch_nr):int(batch_nr + N / nr_of_batches)]
+            batch_t = t[int(batch_nr):int(batch_nr + N / nr_of_batches)]
+
+            y[0, int(batch_nr):int(batch_nr + N/nr_of_batches)] = forward(np.transpose(batch_x), w)
+
+            if weightdecay == 0:
+                gradE = backward(batch_x, y[0, int(batch_nr):int(batch_nr + N/nr_of_batches)], batch_t)
+            else:
+                gradE = gradient_e_decay(y[0, int(batch_nr):int(batch_nr + N/nr_of_batches)], batch_t, batch_x, decay, w)
+
+            if momentum == 0:
+                dW = -eta * gradE
+            else:
+                dW = -eta * gradE + alpha * dW
+            w = w + dW
+            # crit = np.sum(abs(gradE))
+
+            # compute loss
+        if weightdecay == 0:
+            y = forward(np.transpose(x), w)
+            train_loss.append(cost(y, t))
+        else:
+            train_loss.append(cost_decay(y, t, decay, w))
+
+        # validation
+        y_val = forward(np.transpose(x_val), w)
+        if weightdecay == 0:
+            vloss = cost(y_val, t_val)
+            val_loss.append(vloss)
+            if epoch % 1 == 0:
+                stop_criterion[0] = stop_criterion[1]
+                stop_criterion[1] = vloss
+        else:
+            vloss = cost_decay(y_val, t_val, decay, w)
+            val_loss.append(vloss)
+            if epoch % 10 == 0:
+                stop_criterion[0] = stop_criterion[1]
+                stop_criterion[1] = vloss
+        epoch += 1
+
+    end = time.time()
+    return train_loss, y, val_loss, y_val, w, end, start, epoch
