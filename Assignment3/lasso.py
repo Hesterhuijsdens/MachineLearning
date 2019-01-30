@@ -10,9 +10,6 @@ Xv, yv = loadLasso(version="test")
 X = normalize2(X)
 Xv = normalize2(Xv)
 
-print np.mean(X)
-print np.mean(Xv)
-
 # add bias term (column of ones):
 x = np.ones((np.shape(X)[0], np.shape(X)[1] + 1))
 x[:, 1:np.shape(X)[1] + 1] = X
@@ -22,15 +19,15 @@ xv[:, 1:np.shape(Xv)[1] + 1] = Xv
 # store data dimensions:
 p = np.shape(x)[0] # samples -> 50
 n = np.shape(x)[1] # dimensions -> 101
+p_test = np.shape(xv)[0]
 
 # set regularization term:
-decay = 1.0
-eta = 1.0
+decay = 0.09
 
 # initialization for LASSO:
-max_iteration = 40
+max_iteration = 50
 cost = np.zeros(max_iteration)
-w = np.random.rand(n)
+w = np.random.normal(loc=0, scale=0.1, size=n)
 w_plot = np.zeros((n, max_iteration))
 cost_test = np.zeros(max_iteration)
 
@@ -41,12 +38,12 @@ for epoch in range(max_iteration):
 
     for i in range(1, n): # for all dimensions (100)
         # compute gradient of one single feature i and update:
-        ytilde = y - np.matmul(w, np.transpose(x))
-        btilde = np.dot(ytilde, x[:, i])
-        w[i] += eta * soft_threshold(btilde, decay)/(x[:, i]**2).sum()
+        ytilde = y - np.matmul(w, np.transpose(x)) + w[i] * x[:, i]
+        btilde = (1.0/p) * np.dot(ytilde, x[:, i])
+        w[i] = soft_threshold(btilde, decay) #/(x[:, i]**2).sum()
 
     cost[epoch] = cost_function(p, w, x, y, decay)
-    cost_test[epoch] = cost_function(p, w, xv, yv, decay)
+    cost_test[epoch] = cost_function(p_test, w, xv, yv, decay)
 
 print "cost lasso (training): ", cost_function(p, w, x, y, decay)
 

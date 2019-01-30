@@ -30,19 +30,6 @@ def b(x, y):
     return (1.0/p) * np.matmul(np.transpose(x), y)
 
 
-# #
-# def beta_estimate(b, chi, w):
-#     array_len = np.shape(chi)[0]
-#     beta_pred = np.zeros(array_len)
-#     for j in range(array_len):
-#         sum = 0
-#         for i in range(array_len):
-#             if (i != j) & (w[i] != 0.0):
-#                 sum += chi[i, j] * w[i]
-#         beta_pred[j] = w[j] - sum
-#     return beta_pred
-
-
 # def gradient_error_ridge(N, y, w, x, decay):
 #     b_i = (1.0 / N) * np.matmul(np.transpose(x), y)  # slide 58
 #     Chi = chi(x)  # (100,100)
@@ -60,16 +47,27 @@ def b(x, y):
 # Cost function with L1-norm:
 def cost_function(N, w, x, y, decay): # slide 58: f(w)
     cost_normal =  np.sum(np.power(y - np.matmul(w, np.transpose(x)), 2))
-    #lagrange = decay * np.sum(np.abs(w))
-    return (1.0/(2.0*N)) * cost_normal #+ lagrange
+    return (1.0/(2.0*N)) * cost_normal
 
     # y = (50,), w = (100,), x = (50, 100)
     # y - xb = (50, )
 
 
+def cost_lasso(N, w, x, y, decay):
+    cost_normal = cost_function(N, w, x, y, decay)
+    lagrange = decay * np.sum(np.abs(w))
+    return cost_normal + lagrange
+
+
 # function S(..) used for LASSO updates:
 def soft_threshold(b, decay):
-    if decay >= abs(b):
-        return 0
+    if (np.abs(b) - decay) > 0:
+        return np.sign(b) * (np.abs(b) - decay)
     else:
-        return b - decay * np.sign(b)
+        return 0
+
+
+    # if decay >= abs(b):
+    #     return 0
+    # else:
+    #     return b - decay * np.sign(b)
