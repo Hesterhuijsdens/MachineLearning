@@ -45,7 +45,7 @@ def b(x, y):
 
 
 # Cost function with L1-norm:
-def cost_function(N, w, x, y, decay): # slide 58: f(w)
+def cost_function(N, w, x, y): # slide 58: f(w)
     cost_normal =  np.sum(np.power(y - np.matmul(w, np.transpose(x)), 2))
     return (1.0/(2.0*N)) * cost_normal
 
@@ -65,9 +65,3 @@ def soft_threshold(b, decay):
         return np.sign(b) * (np.abs(b) - decay)
     else:
         return 0
-
-
-    # if decay >= abs(b):
-    #     return 0
-    # else:
-    #     return b - decay * np.sign(b)

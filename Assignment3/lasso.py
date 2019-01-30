@@ -23,7 +23,7 @@ n = np.shape(x)[1] # dimensions -> 101
 p_test = np.shape(xv)[0]
 
 # set regularization term:
-decay = 0.01#0.000000000000000000001 #0.018 #0.01
+decay = 0.01
 
 # initialization for LASSO:
 cost = []
@@ -39,14 +39,13 @@ while not converged or epoch < 10:
     # save w for plotting:
     print epoch
     w_plot[:, epoch] = w
-
     converged = True
 
     for i in range(1, n): # for all dimensions (100)
         # compute gradient of one single feature i and update:
         ytilde = y - np.matmul(w, np.transpose(x)) + w[i] * x[:, i]
         btilde = (1.0/p) * np.dot(ytilde, x[:, i])
-        w_new = soft_threshold(btilde, decay) #/(x[:, i]**2).sum()
+        w_new = soft_threshold(btilde, decay)
 
         if np.abs(w_new - w[i]) >= 0.000001:
             converged = False
@@ -60,7 +59,6 @@ print "epochs: ", epoch
 
 # plot w as function of epoch:
 plt.figure(1)
-#plt.plot(range(epoch), np.transpose(np.transpose(w_plot)[1:101]))
 plt.plot(range(epoch), np.transpose(w_plot[1:101, 0:epoch]))
 plt.xlabel('iteration')
 plt.ylabel('coefficients w')

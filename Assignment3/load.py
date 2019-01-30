@@ -19,7 +19,9 @@ def loadLasso(version="train"):
 
 
 # function to normalize the data:
-def normalize2(x):
-    m = np.mean(x)
-    std = np.std(x)
-    return (x - m)/std
+def normalize(x):
+    norm_factor = np.linalg.norm(x, ord=2)
+    if norm_factor == 0:
+        return x
+    else:
+        return x / norm_factor
