@@ -6,11 +6,11 @@ import time
 
 # load train and test data:
 x, t = load37(version="train")
-#x = x[:300]
-#t = t[:300]
+x = x[:300]
+t = t[:300]
 x_test, t_test = load37(version="test")
-#x_test = x_test[:100]
-#t_test = t_test[:100]
+x_test = x_test[:100]
+t_test = t_test[:100]
 
 # store dimensions of data:
 N = np.shape(x)[0]
@@ -47,12 +47,13 @@ for epoch in range(epochs):
 # compute and plot results:
 class_err = classification_error(y, t)
 print "class_err: ", class_err
-print "E: ", cost_decay(y, t, decay, w)
+print "E (decay): ", cost_decay(y, t, decay, w)
+print "E: ", cost(y, t)
 
 class_err_test = classification_error(forward(np.transpose(x_test), w), t_test)
 print "class_err_test: ", class_err_test
-print "E test: ", cost_decay(forward(np.transpose(x_test), w), t_test, decay, w)
-
+print "E test (decay): ", cost_decay(forward(np.transpose(x_test), w), t_test, decay, w)
+print "E: ", cost(forward(np.transpose(x_test), w), t_test)
 # stop time:
 end = time.time()
 print "time: ", end - start

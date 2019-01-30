@@ -6,7 +6,7 @@ np.random.seed(5)
 # initialize parameters
 T_values = [10.0, 50.0, 100.0, 2000.0, 8000.0]
 dt = 1.0
-v = 0.01 #[0.0001, 0.05, 0.01 , 0.1]#, 0.5, 0.9]
+v = 0.05 #[0.0001, 0.05, 0.01 , 0.1]#, 0.5, 0.9]
 
 plt.figure(1)
 
@@ -14,7 +14,6 @@ plt.figure(1)
 for T in T_values:
     x_optimal = [0.0]
     u_optimal = []
-    print 'T'
     for t in range(int(T / dt)-1):
 
         # compute optimal control:
