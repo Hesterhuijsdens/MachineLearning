@@ -22,13 +22,7 @@ p = np.shape(x)[0] # samples -> 50
 n = np.shape(x)[1] # dimensions -> 101
 
 # set regularization term:
-alpha = np.logspace(-2, 0.5, 100)#np.logspace(-2, 1.5, 100)
-
-# initialization for LASSO:
-max_iteration = 60
-cost = np.zeros(max_iteration)
-w_plot = np.zeros((n, max_iteration))
-cost_test = np.zeros(max_iteration)
+alpha = np.logspace(-2, 0.5, 100)
 
 # initialize for cross fold validation:
 cost_crossfold = np.zeros(len(alpha))
@@ -39,13 +33,11 @@ counter = 0
 for decay in alpha:
     if counter == 0:
         w = np.random.normal(loc=0, scale=0.1, size=n)
-        max_iteration = 100
 
     # coordinate descent:
     epoch = 0
     converged = False
     while not converged or epoch < 10:
-        print epoch
         converged = True
         for i in range(1, n): # for all dimensions (100)
             # compute gradient of one single feature i and update:
